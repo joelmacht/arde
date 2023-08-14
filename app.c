@@ -9,8 +9,6 @@ int main(void)
 
     videoSetMode(MODE_0_2D);
 
-    setBackdropColor(1);
-
     // PrintConsole console;
     // consoleInit(&console, 0, BgType_Text8bpp, BgSize_B16_256x256, 0, 0, false, true);
 
