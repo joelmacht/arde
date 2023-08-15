@@ -10,6 +10,7 @@
         "nds.h": "c",
         "stdio.h": "c",
         "console.h": "c",
-        "system.h": "c"
+        "system.h": "c",
+        "video.h": "c"
     }
 }

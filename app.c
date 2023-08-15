@@ -1,12 +1,9 @@
 #include <nds/system.h>
 #include <nds/arm9/video.h>
-
-#include <stdio.h>
+#include <nds/interrupts.h>
 
 int main(void)
 {
-    // powerOn(POWER_ALL);
-
     videoSetMode(MODE_FB0);
 
     vramSetBankA(VRAM_A_LCD);
@@ -15,7 +12,7 @@ int main(void)
     {
         for (int x = 0; x < SCREEN_WIDTH; ++x)
         {
-            VRAM_A[y * SCREEN_WIDTH + x] = ARGB16(1, 1, 0, 0);
+            VRAM_A[y * SCREEN_WIDTH + x] = ARGB16(1, 15, 0, 0);
         }
     }
 
