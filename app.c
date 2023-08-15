@@ -1,23 +1,27 @@
-#include "nds/arm9/console.h"
-#include "nds/system.h"
+#include <nds/system.h>
+#include <nds/arm9/video.h>
 
 #include <stdio.h>
 
 int main(void)
 {
-    powerOn(POWER_ALL_2D);
+    // powerOn(POWER_ALL);
 
-    videoSetMode(MODE_0_2D);
+    videoSetMode(MODE_FB0);
 
-    // PrintConsole console;
-    // consoleInit(&console, 0, BgType_Text8bpp, BgSize_B16_256x256, 0, 0, false, true);
+    vramSetBankA(VRAM_A_LCD);
 
-    // consoleDebugInit(DebugDevice_CONSOLE);
-    // consoleDemoInit();
-
-    while(true)
+    for (int y = 0; y < SCREEN_HEIGHT; ++y)
     {
-        // printf("Hello World\n");
+        for (int x = 0; x < SCREEN_WIDTH; ++x)
+        {
+            VRAM_A[y * SCREEN_WIDTH + x] = ARGB16(1, 1, 0, 0);
+        }
+    }
+
+    while(1)
+    {
+        swiWaitForVBlank();
     }
 
     return 0;
