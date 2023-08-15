@@ -12,7 +12,7 @@ int main(void)
     {
         for (int x = 0; x < SCREEN_WIDTH; ++x)
         {
-            VRAM_A[y * SCREEN_WIDTH + x] = ARGB16(1, 15, 0, 0);
+            VRAM_A[y * SCREEN_WIDTH + x] = ARGB16(1, 31, 0, 0);
         }
     }
 
