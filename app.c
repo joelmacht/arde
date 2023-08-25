@@ -5,12 +5,12 @@
 #include <math.h>
 #include <string.h>
 
-#define FRAMEBUFFER_SIZE SCREEN_WIDTH * SCREEN_HEIGHT * sizeof(u16)
+#define FRAMEBUFFER_SIZE SCREEN_WIDTH * SCREEN_HEIGHT
 static u16 FRAMEBUFFER[FRAMEBUFFER_SIZE];
 
 void clear_framebuffer()
 {
-    memset(FRAMEBUFFER, (u16)0, FRAMEBUFFER_SIZE);
+    memset(FRAMEBUFFER, (u16)0, FRAMEBUFFER_SIZE * sizeof(FRAMEBUFFER[0]));
 }
 
 void draw_pixel(int x, int y, u8 r, u8 g, u8 b)
@@ -145,7 +145,7 @@ int main(void)
 
         swiWaitForVBlank();
 
-        memcpy(VRAM_A, FRAMEBUFFER, FRAMEBUFFER_SIZE);
+        memcpy(VRAM_A, FRAMEBUFFER, FRAMEBUFFER_SIZE * sizeof(FRAMEBUFFER[0]));
     }
 
     return 0;
