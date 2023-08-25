@@ -3,15 +3,19 @@
 #include <nds/interrupts.h>
 
 #include <math.h>
+#include <string.h>
+
+#define FRAMEBUFFER_SIZE SCREEN_WIDTH * SCREEN_HEIGHT * sizeof(u16)
+static u16 FRAMEBUFFER[FRAMEBUFFER_SIZE];
 
 void clear_framebuffer()
 {
-    memset(VRAM_A, (u16)0, sizeof(u16) * SCREEN_WIDTH * SCREEN_HEIGHT);
+    memset(FRAMEBUFFER, (u16)0, FRAMEBUFFER_SIZE);
 }
 
 void draw_pixel(int x, int y, u8 r, u8 g, u8 b)
 {
-    VRAM_A[y * SCREEN_WIDTH + x] = ARGB16(1, r >> 3, g >> 3, b >> 3);
+    FRAMEBUFFER[y * SCREEN_WIDTH + x] = ARGB16(1, r >> 3, g >> 3, b >> 3);
 }
 
 void draw_circle(float x, float y, float radius)
@@ -117,7 +121,7 @@ int main(void)
     point_masses[1].acceleration[0] = 0.0f;
     point_masses[1].acceleration[1] = 0.0f;
 
-    point_masses[2].mass = 10.0;
+    point_masses[2].mass = 30.0;
     point_masses[2].position[0] = SCREEN_WIDTH / 2.0f;
     point_masses[2].position[1] = SCREEN_HEIGHT / 2.0f;
     point_masses[2].velocity[0] = 0.0f;
@@ -129,7 +133,7 @@ int main(void)
 
     while(1)
     {
-        swiWaitForVBlank();
+        update(point_mass_count, point_masses, timestep);
 
         clear_framebuffer();
 
@@ -139,7 +143,9 @@ int main(void)
             draw_circle(point_mass->position[0], point_mass->position[1], point_mass->mass);
         }
 
-        update(point_mass_count, point_masses, timestep);
+        swiWaitForVBlank();
+
+        memcpy(VRAM_A, FRAMEBUFFER, FRAMEBUFFER_SIZE);
     }
 
     return 0;

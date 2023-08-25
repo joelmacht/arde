@@ -12,6 +12,7 @@
         "console.h": "c",
         "system.h": "c",
         "video.h": "c",
-        "math.h": "c"
+        "math.h": "c",
+        "string.h": "c"
     }
 }
