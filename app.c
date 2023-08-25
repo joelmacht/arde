@@ -98,34 +98,34 @@ int main(void)
 
     vramSetBankA(VRAM_A_LCD);
 
-    const int point_mass_count = 2;
+    const int point_mass_count = 3;
     point_mass_t point_masses[point_mass_count];
     
-    point_masses[0].mass = 10.0;
+    point_masses[0].mass = 5.0;
     point_masses[0].position[0] = SCREEN_WIDTH / 2.0f - 50.0f;
     point_masses[0].position[1] = SCREEN_HEIGHT / 2.0f;
-    point_masses[0].velocity[0] = 5.0f;
-    point_masses[0].velocity[1] = 10.0f;
+    point_masses[0].velocity[0] = 10.0f;
+    point_masses[0].velocity[1] = 20.0f;
     point_masses[0].acceleration[0] = 0.0f;
     point_masses[0].acceleration[1] = 0.0f;
 
-    point_masses[1].mass = 10.0;
+    point_masses[1].mass = 5.0;
     point_masses[1].position[0] = SCREEN_WIDTH / 2.0f + 50.0f;
     point_masses[1].position[1] = SCREEN_HEIGHT / 2.0f;
-    point_masses[1].velocity[0] = -20.0f;
-    point_masses[1].velocity[1] = -10.0f;
+    point_masses[1].velocity[0] = -40.0f;
+    point_masses[1].velocity[1] = -20.0f;
     point_masses[1].acceleration[0] = 0.0f;
     point_masses[1].acceleration[1] = 0.0f;
 
-    // point_masses[2].mass = 30.0;
-    // point_masses[2].position[0] = SCREEN_WIDTH / 2.0f;
-    // point_masses[2].position[1] = SCREEN_HEIGHT / 2.0f;
-    // point_masses[2].velocity[0] = 0.0f;
-    // point_masses[2].velocity[1] = 0.0f;
-    // point_masses[2].acceleration[0] = 0.0f;
-    // point_masses[2].acceleration[1] = 0.0f;
+    point_masses[2].mass = 10.0;
+    point_masses[2].position[0] = SCREEN_WIDTH / 2.0f;
+    point_masses[2].position[1] = SCREEN_HEIGHT / 2.0f;
+    point_masses[2].velocity[0] = 0.0f;
+    point_masses[2].velocity[1] = 0.0f;
+    point_masses[2].acceleration[0] = 0.0f;
+    point_masses[2].acceleration[1] = 0.0f;
 
-    float timestep = 0.01f;
+    float timestep = 1e-3f;
 
     while(1)
     {
