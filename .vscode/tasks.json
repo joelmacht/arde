@@ -22,6 +22,20 @@
 			"options": {
 				"cwd": "${workspaceFolder}"
 			}
+		},
+		{
+			"type": "shell",
+			"label": "run (no$gba)",
+			"dependsOn": [
+				"build"
+			],
+			"command": "C:/no$gba/NO$GBA.EXE",
+			"args": [
+				"app.nds"
+			],
+			"options": {
+				"cwd": "${workspaceFolder}"
+			}
 		}
 	]
 }
