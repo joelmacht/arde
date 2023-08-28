@@ -79,7 +79,7 @@ void update_acceleration(point_mass_t* point_mass, int point_mass_count, point_m
     point_mass->acceleration[1] = force[1] / point_mass->mass;
 }
 
-void update(int point_mass_count, point_mass_t* point_masses, float timestep)
+void point_mass_update_list(int point_mass_count, point_mass_t* point_masses, float timestep)
 {
     for (int point_mass_index = 0; point_mass_index < point_mass_count; ++point_mass_index)
     {
@@ -129,11 +129,11 @@ int main(void)
     point_masses[2].acceleration[0] = 0.0f;
     point_masses[2].acceleration[1] = 0.0f;
 
-    float timestep = 1e-3f;
+    float timestep = 1e-2f;
 
     while(1)
     {
-        update(point_mass_count, point_masses, timestep);
+        point_mass_update_list(point_mass_count, point_masses, timestep);
 
         clear_framebuffer();
 

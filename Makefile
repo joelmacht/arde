@@ -24,10 +24,13 @@ INCLUDES	:=	include build
 #---------------------------------------------------------------------------------
 ARCH	:=	-mthumb -mthumb-interwork
 
-CFLAGS	:=	-g -Wall -O2\
- 			-march=armv5te -mtune=arm946e-s -fomit-frame-pointer\
+CFLAGS	:=	-g -Wall -O0\
+ 			-march=armv5te -mtune=arm946e-s\
 			-ffast-math \
 			$(ARCH)
+# CFLAGS  +=  -fomit-frame-pointer
+# CFLAGS  +=  -fno-omit-frame-pointer
+# CFLAGS  +=  -fverbose-asm
 
 CFLAGS	+=	$(INCLUDE) -DARM9
 CXXFLAGS	:= $(CFLAGS) -fno-rtti -fno-exceptions
