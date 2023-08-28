@@ -96,6 +96,15 @@ void point_mass_update_list(int point_mass_count, point_mass_t* point_masses, fl
     }
 }
 
+void point_mass_draw_list(int point_mass_count, point_mass_t* point_masses)
+{
+    for (int point_mass_index = 0; point_mass_index < point_mass_count; ++point_mass_index)
+    {
+        point_mass_t* point_mass = point_masses + point_mass_index;
+        draw_circle(point_mass->position[0], point_mass->position[1], point_mass->mass);
+    }
+}
+
 int main(void)
 {
     videoSetMode(MODE_FB0);
@@ -137,11 +146,7 @@ int main(void)
 
         clear_framebuffer();
 
-        for (int point_mass_index = 0; point_mass_index < point_mass_count; ++point_mass_index)
-        {
-            point_mass_t* point_mass = point_masses + point_mass_index;
-            draw_circle(point_mass->position[0], point_mass->position[1], point_mass->mass);
-        }
+        point_mass_draw_list(point_mass_count, point_masses);
 
         swiWaitForVBlank();
 
