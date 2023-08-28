@@ -7,6 +7,7 @@
 #include <math.h>
 #include <string.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 #define FRAMEBUFFER_SIZE SCREEN_WIDTH * SCREEN_HEIGHT
 static u16 FRAMEBUFFER[FRAMEBUFFER_SIZE];
@@ -181,7 +182,7 @@ void point_mass_draw_list(int point_mass_count, point_mass_t* point_masses)
     for (int point_mass_index = 0; point_mass_index < point_mass_count; ++point_mass_index)
     {
         point_mass_t* point_mass = point_masses + point_mass_index;
-        draw_circle(point_mass->position[0], point_mass->position[1], 0.01f * point_mass->mass);
+        draw_circle(point_mass->position[0], point_mass->position[1], 0.01f);
     }
 }
 
@@ -193,33 +194,21 @@ int main(void)
 
     consoleDemoInit();
 
-    const int point_mass_count = 3;
+    const int point_mass_count = 50;
     point_mass_t point_masses[point_mass_count];
+
+    for (int point_mass_index = 0; point_mass_index < point_mass_count; ++point_mass_index)
+    {
+        point_mass_t* point_mass = point_masses + point_mass_index;
+        point_mass->mass = 1.0f;
+        point_mass->position[0] = 2.0f * rand()/RAND_MAX - 1.0f;
+        point_mass->position[1] = 2.0f * rand()/RAND_MAX - 1.0f;
+        point_mass->velocity[0] = 0.0f;
+        point_mass->velocity[1] = 0.0f;
+        point_mass->acceleration[0] = 0.0f;
+        point_mass->acceleration[1] = 0.0f;
+    }
     
-    point_masses[0].mass = 5.0;
-    point_masses[0].position[0] = 0.5f;
-    point_masses[0].position[1] = 0.0f;
-    point_masses[0].velocity[0] = -0.5f;
-    point_masses[0].velocity[1] = 1.0f;
-    point_masses[0].acceleration[0] = 0.0f;
-    point_masses[0].acceleration[1] = 0.0f;
-
-    point_masses[1].mass = 5.0;
-    point_masses[1].position[0] = -0.5f;
-    point_masses[1].position[1] = 0.0f;
-    point_masses[1].velocity[0] = 2.0f;
-    point_masses[1].velocity[1] = -2.0f;
-    point_masses[1].acceleration[0] = 0.0f;
-    point_masses[1].acceleration[1] = 0.0f;
-
-    point_masses[2].mass = 8.0;
-    point_masses[2].position[0] = 0.0f;
-    point_masses[2].position[1] = 0.0f;
-    point_masses[2].velocity[0] = 0.0f;
-    point_masses[2].velocity[1] = 0.0f;
-    point_masses[2].acceleration[0] = 0.0f;
-    point_masses[2].acceleration[1] = 0.0f;
-
     const float timestep = 1e-3f;
 
     while(1)
