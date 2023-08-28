@@ -13,6 +13,8 @@
         "system.h": "c",
         "video.h": "c",
         "math.h": "c",
-        "string.h": "c"
+        "string.h": "c",
+        "ndstypes.h": "c",
+        "interrupts.h": "c"
     }
 }

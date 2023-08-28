@@ -1,9 +1,12 @@
 #include <nds/system.h>
 #include <nds/arm9/video.h>
 #include <nds/interrupts.h>
+#include <nds/timers.h>
+#include <nds/arm9/console.h>
 
 #include <math.h>
 #include <string.h>
+#include <stdio.h>
 
 #define FRAMEBUFFER_SIZE SCREEN_WIDTH * SCREEN_HEIGHT
 static u16 FRAMEBUFFER[FRAMEBUFFER_SIZE];
@@ -111,6 +114,8 @@ int main(void)
 
     vramSetBankA(VRAM_A_LCD);
 
+    consoleDemoInit();
+
     const int point_mass_count = 3;
     point_mass_t point_masses[point_mass_count];
     
@@ -142,11 +147,18 @@ int main(void)
 
     while(1)
     {
+        cpuStartTiming(0);
+
         point_mass_update_list(point_mass_count, point_masses, timestep);
 
         clear_framebuffer();
 
         point_mass_draw_list(point_mass_count, point_masses);
+
+        u32 per_frame_ticks = cpuEndTiming();
+
+        consoleClear();
+        printf("FPS: %.3f\n", (float)BUS_CLOCK / per_frame_ticks);
 
         swiWaitForVBlank();
 
