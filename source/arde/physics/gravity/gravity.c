@@ -2,10 +2,20 @@
 
 #include <arde/graphics/graphics.h>
 
+static const float constant = 1e0f;
+
+float arde_gravitational_potential_gradient(float mass, float distance)
+{
+    return constant * mass / (distance * distance);
+}
+
+float arde_radial_harmonic_potential_gradient(float mass, float distance)
+{
+    return constant * mass * distance;
+}
+
 void arde_update_acceleration(arde_point_mass_t* point_mass, int point_mass_count, arde_point_mass_t* point_masses)
 {
-    static const float constant = 1e0f;
-
     float force[2];
     force[0] = 0.0f;
     force[1] = 0.0f;
@@ -16,14 +26,17 @@ void arde_update_acceleration(arde_point_mass_t* point_mass, int point_mass_coun
         
         if (point_mass != other_point_mass)
         {
-            float direction[2] = {
-                other_point_mass->position[0] - point_mass->position[0],
-                other_point_mass->position[1] - point_mass->position[1],
+            float radial_direction[2] = {
+                point_mass->position[0] - other_point_mass->position[0],
+                point_mass->position[1] - other_point_mass->position[1],
             };
-            float distance = sqrtf(direction[0] * direction[0] + direction[1] * direction[1]);
-            float strength = constant * point_mass->mass * other_point_mass->mass / (distance * distance);
-            force[0] += strength * direction[0] / distance;
-            force[1] += strength * direction[1] / distance;
+            float distance = sqrtf(radial_direction[0] * radial_direction[0] + radial_direction[1] * radial_direction[1]);
+            radial_direction[0] /= distance;
+            radial_direction[1] /= distance;
+            // float force_magnitude = point_mass->mass * -arde_gravitational_potential_gradient(other_point_mass->mass, distance);
+            float force_magnitude = point_mass->mass * -arde_radial_harmonic_potential_gradient(other_point_mass->mass, distance);
+            force[0] += force_magnitude * radial_direction[0];
+            force[1] += force_magnitude * radial_direction[1];
         }
     }
 
