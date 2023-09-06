@@ -17,7 +17,16 @@ include $(DEVKITARM)/ds_rules
 TARGET		:=	app
 BUILD		:=	build
 SOURCES		:=	gfx source data .
+SOURCES     +=  source/arde
+SOURCES     +=  source/arde/graphics
+SOURCES     +=  source/arde/physics
+SOURCES     +=  source/arde/physics/gravity
 INCLUDES	:=	include build
+INCLUDES	+=	source
+INCLUDES	+=	source/arde
+INCLUDES	+=	source/arde/graphics
+INCLUDES	+=	source/arde/physics
+INCLUDES	+=	source/arde/physics/gravity
 
 #---------------------------------------------------------------------------------
 # options for code generation

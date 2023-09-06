@@ -15,6 +15,7 @@
         "math.h": "c",
         "string.h": "c",
         "ndstypes.h": "c",
-        "interrupts.h": "c"
+        "interrupts.h": "c",
+        "graphics.h": "c"
     }
 }
