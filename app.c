@@ -6,6 +6,7 @@
 #include <nds/interrupts.h>
 #include <nds/timers.h>
 #include <nds/arm9/console.h>
+#include <nds/ndstypes.h>
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -19,8 +20,6 @@ int main(void)
     vramSetBankA(VRAM_A_LCD);
 
     consoleDemoInit();
-
-    const float timestep = 1e-3f;
 
     // const int point_mass_count = 50;
     // arde_point_mass_t point_masses[point_mass_count];
@@ -63,26 +62,38 @@ int main(void)
     arde_point_mass_update_acceleration(point_masses + 0, point_mass_count, point_masses);    
     arde_point_mass_update_acceleration(point_masses + 1, point_mass_count, point_masses);    
 
-    point_masses[0].velocity[0] = point_masses[0].acceleration[1];
-    point_masses[0].velocity[1] = -point_masses[0].acceleration[0];
+    float a = sqrtf(point_masses[0].acceleration[0] * point_masses[0].acceleration[0] + point_masses[0].acceleration[1] * point_masses[0].acceleration[1]);
+    float r = sqrtf(point_masses[0].position[0] * point_masses[0].position[0] + point_masses[0].position[1] * point_masses[0].position[1]);
+    float v = sqrtf(a * r);
+
+    point_masses[0].velocity[0] = point_masses[0].acceleration[1] / a * v;
+    point_masses[0].velocity[1] = -point_masses[0].acceleration[0] / a * v;
     
-    point_masses[1].velocity[0] = point_masses[1].acceleration[1];
-    point_masses[1].velocity[1] = -point_masses[1].acceleration[0];
+    point_masses[1].velocity[0] = point_masses[1].acceleration[1] / a * v;
+    point_masses[1].velocity[1] = -point_masses[1].acceleration[0] / a * v;
+
+    timerStart(0, ClockDivider_1, 0xff, NULL);
+    timerStart(1, ClockDivider_1, 0xff, NULL);
 
     while(1)
     {
-        cpuStartTiming(0);
+        timerElapsed(0);
+
+        u16 cycles_per_tick = timerElapsed(1);
+
+        float timestep = cycles_per_tick / (float)BUS_CLOCK;
 
         arde_point_mass_update_collection(point_mass_count, point_masses, timestep);
 
-        arde_clear_framebuffer(FRAMEBUFFER);
+        // arde_clear_framebuffer(FRAMEBUFFER);
 
         arde_point_mass_draw_collection(FRAMEBUFFER, point_mass_count, point_masses);
 
-        u32 per_frame_ticks = cpuEndTiming();
+        u16 cycles_per_frame = timerElapsed(0);
 
         consoleClear();
-        printf("FPS: %.3f\n", (float)BUS_CLOCK / per_frame_ticks);
+        printf("FPS: %.3f\n", (float)BUS_CLOCK / cycles_per_frame);
+        printf("dt: %1.3ef\n", timestep);
 
         swiWaitForVBlank();
 

@@ -2,7 +2,7 @@
 
 #include <arde/graphics/graphics.h>
 
-static const float constant = 1e0f;
+static const float constant = 1e2f;
 
 float arde_gravitational_potential_gradient(float mass, float distance)
 {
@@ -41,19 +41,30 @@ void arde_point_mass_update_collection(int point_mass_count, arde_point_mass_t* 
 {
     for (int point_mass_index = 0; point_mass_index < point_mass_count; ++point_mass_index)
     {
-        arde_point_mass_update_acceleration(point_masses + point_mass_index, point_mass_count, point_masses);
+        arde_point_mass_t* point_mass = point_masses + point_mass_index;
+
+        point_mass->position[0] += point_mass->velocity[0] * timestep + 0.5f * point_mass->acceleration[0] * timestep * timestep;
+        point_mass->position[1] += point_mass->velocity[1] * timestep + 0.5f * point_mass->acceleration[1] * timestep * timestep;
+        
+        // first half
+        point_mass->velocity[0] += 0.5f * point_mass->acceleration[0] * timestep;
+        point_mass->velocity[1] += 0.5f * point_mass->acceleration[1] * timestep;
+        
+        // reset
+        point_mass->acceleration[0] = 0.0f;
+        point_mass->acceleration[1] = 0.0f;
     }
 
     for (int point_mass_index = 0; point_mass_index < point_mass_count; ++point_mass_index)
     {
         arde_point_mass_t* point_mass = point_masses + point_mass_index;
-        point_mass->velocity[0] += timestep * point_mass->acceleration[0];
-        point_mass->velocity[1] += timestep * point_mass->acceleration[1];
-        point_mass->position[0] += timestep * point_mass->velocity[0];
-        point_mass->position[1] += timestep * point_mass->velocity[1];
-        // reset
-        point_mass->acceleration[0] = 0.0f;
-        point_mass->acceleration[1] = 0.0f;
+
+        // should be independent of velocity
+        arde_point_mass_update_acceleration(point_mass, point_mass_count, point_masses);
+        
+        // second half
+        point_mass->velocity[0] += 0.5f * point_mass->acceleration[0] * timestep;
+        point_mass->velocity[1] += 0.5f * point_mass->acceleration[1] * timestep;
     }
 }
 
