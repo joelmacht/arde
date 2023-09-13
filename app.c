@@ -41,11 +41,11 @@ int main(void)
     {
         cpuStartTiming(0);
 
-        arde_point_mass_update_list(point_mass_count, point_masses, timestep);
+        arde_point_mass_update_collection(point_mass_count, point_masses, timestep);
 
         arde_clear_framebuffer(FRAMEBUFFER);
 
-        arde_point_mass_draw_list(FRAMEBUFFER, point_mass_count, point_masses);
+        arde_point_mass_draw_collection(FRAMEBUFFER, point_mass_count, point_masses);
 
         u32 per_frame_ticks = cpuEndTiming();
 

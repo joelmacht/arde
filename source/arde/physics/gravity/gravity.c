@@ -37,7 +37,7 @@ void arde_update_acceleration(arde_point_mass_t* point_mass, int point_mass_coun
     }
 }
 
-void arde_point_mass_update_list(int point_mass_count, arde_point_mass_t* point_masses, float timestep)
+void arde_point_mass_update_collection(int point_mass_count, arde_point_mass_t* point_masses, float timestep)
 {
     for (int point_mass_index = 0; point_mass_index < point_mass_count; ++point_mass_index)
     {
@@ -57,7 +57,7 @@ void arde_point_mass_update_list(int point_mass_count, arde_point_mass_t* point_
     }
 }
 
-void arde_point_mass_draw_list(u16* framebuffer, int point_mass_count, arde_point_mass_t* point_masses)
+void arde_point_mass_draw_collection(u16* framebuffer, int point_mass_count, arde_point_mass_t* point_masses)
 {
     for (int point_mass_index = 0; point_mass_index < point_mass_count; ++point_mass_index)
     {
