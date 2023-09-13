@@ -11,7 +11,7 @@ typedef struct
     float acceleration[2];
 } arde_point_mass_t;
 
-void arde_update_acceleration(arde_point_mass_t* point_mass, int point_mass_count, arde_point_mass_t* point_masses);
+void arde_point_mass_update_acceleration(arde_point_mass_t* point_mass, int point_mass_count, arde_point_mass_t* point_masses);
 
 void arde_point_mass_update_collection(int point_mass_count, arde_point_mass_t* point_masses, float timestep);
 

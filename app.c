@@ -20,22 +20,54 @@ int main(void)
 
     consoleDemoInit();
 
-    const int point_mass_count = 50;
+    const float timestep = 1e-3f;
+
+    // const int point_mass_count = 50;
+    // arde_point_mass_t point_masses[point_mass_count];
+
+    // for (int point_mass_index = 0; point_mass_index < point_mass_count; ++point_mass_index)
+    // {
+    //     arde_point_mass_t* point_mass = point_masses + point_mass_index;
+    //     point_mass->mass = 1.0f;
+    //     point_mass->position[0] = 2.0f * rand()/RAND_MAX - 1.0f;
+    //     point_mass->position[1] = 2.0f * rand()/RAND_MAX - 1.0f;
+    //     point_mass->velocity[0] = 0.0f;
+    //     point_mass->velocity[1] = 0.0f;
+    //     point_mass->acceleration[0] = 0.0f;
+    //     point_mass->acceleration[1] = 0.0f;
+    // }
+
+    // circular orbit for two body problem
+
+    const int point_mass_count = 2;
     arde_point_mass_t point_masses[point_mass_count];
 
-    for (int point_mass_index = 0; point_mass_index < point_mass_count; ++point_mass_index)
-    {
-        arde_point_mass_t* point_mass = point_masses + point_mass_index;
-        point_mass->mass = 1.0f;
-        point_mass->position[0] = 2.0f * rand()/RAND_MAX - 1.0f;
-        point_mass->position[1] = 2.0f * rand()/RAND_MAX - 1.0f;
-        point_mass->velocity[0] = 0.0f;
-        point_mass->velocity[1] = 0.0f;
-        point_mass->acceleration[0] = 0.0f;
-        point_mass->acceleration[1] = 0.0f;
-    }
+    point_masses[0].mass = 1.0f;
+    point_masses[0].position[0] = 0.5f;
+    point_masses[0].position[1] = 0.0f;
+    point_masses[0].velocity[0] = 0.0f;
+    point_masses[0].velocity[1] = 0.0f;
+    point_masses[0].acceleration[0] = 0.0f;
+    point_masses[0].acceleration[1] = 0.0f;
+
+    point_masses[1].mass = 1.0f;
+    point_masses[1].position[0] = -0.5f;
+    point_masses[1].position[1] = 0.0f;
+    point_masses[1].velocity[0] = 0.0f;
+    point_masses[1].velocity[1] = 0.0f;
+    point_masses[1].acceleration[0] = 0.0f;
+    point_masses[1].acceleration[1] = 0.0f;
     
-    const float timestep = 1e-3f;
+    // resets acceleration...
+    // arde_point_mass_update_collection(point_mass_count, point_masses, timestep);
+    arde_point_mass_update_acceleration(point_masses + 0, point_mass_count, point_masses);    
+    arde_point_mass_update_acceleration(point_masses + 1, point_mass_count, point_masses);    
+
+    point_masses[0].velocity[0] = point_masses[0].acceleration[1];
+    point_masses[0].velocity[1] = -point_masses[0].acceleration[0];
+    
+    point_masses[1].velocity[0] = point_masses[1].acceleration[1];
+    point_masses[1].velocity[1] = -point_masses[1].acceleration[0];
 
     while(1)
     {

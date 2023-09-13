@@ -14,7 +14,7 @@ float arde_radial_harmonic_potential_gradient(float mass, float distance)
     return constant * mass * distance;
 }
 
-void arde_update_acceleration(arde_point_mass_t* point_mass, int point_mass_count, arde_point_mass_t* point_masses)
+void arde_point_mass_update_acceleration(arde_point_mass_t* point_mass, int point_mass_count, arde_point_mass_t* point_masses)
 {
     // required to happen before
     // point_mass->acceleration[0] = 0.0f;
@@ -41,7 +41,7 @@ void arde_point_mass_update_collection(int point_mass_count, arde_point_mass_t* 
 {
     for (int point_mass_index = 0; point_mass_index < point_mass_count; ++point_mass_index)
     {
-        arde_update_acceleration(point_masses + point_mass_index, point_mass_count, point_masses);
+        arde_point_mass_update_acceleration(point_masses + point_mass_index, point_mass_count, point_masses);
     }
 
     for (int point_mass_index = 0; point_mass_index < point_mass_count; ++point_mass_index)
