@@ -79,6 +79,7 @@ int main(void)
     timerStart(1, ClockDivider_1, 0xff, NULL);
 
     float zoom = 1.0f;
+    float yaw = 0.0f;
 
     while(1)
     {
@@ -91,11 +92,11 @@ int main(void)
         scanKeys();
         int keys_down_state = keysDown();
         int keys_held_state = keysHeld();
-        if (KEY_L & keys_down_state || KEY_L & keys_held_state)
+        if (KEY_X & keys_down_state || KEY_X & keys_held_state)
         {
             zoom += 0.1f;
         }
-        else if (KEY_R & keys_down_state || KEY_R & keys_held_state)
+        else if (KEY_Y & keys_down_state || KEY_Y & keys_held_state)
         {
             zoom -= 0.1f;
         }
@@ -118,12 +119,27 @@ int main(void)
         {
             world_to_observer.translation.data[0] += 0.1f;
         }
+        if (KEY_L & keys_down_state || KEY_L & keys_held_state)
+        {
+            yaw -= 0.1f;
+        }
+        else if (KEY_R & keys_down_state || KEY_R & keys_held_state)
+        {
+            yaw += 0.1f;
+        }
+        world_to_observer.rotation.data[0] = cosf(yaw);
+        world_to_observer.rotation.data[1] = sinf(yaw);
+        world_to_observer.rotation.data[2] = -sinf(yaw);
+        world_to_observer.rotation.data[3] = cosf(yaw);
 
         arde_point_mass_update_collection(point_mass_count, point_masses, timestep);
 
         arde_clear_framebuffer(FRAMEBUFFER);
 
         arde_point_mass_draw_collection(FRAMEBUFFER, point_mass_count, point_masses);
+
+        arde_draw_line(FRAMEBUFFER, 0.0f, 0.0f, 1.0f, 0.0f, 255, 0, 0);
+        arde_draw_line(FRAMEBUFFER, 0.0f, 0.0f, 0.0f, 1.0f, 0, 255, 0);
 
         u16 cycles_per_frame = timerElapsed(0);
 

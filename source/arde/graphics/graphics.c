@@ -27,6 +27,68 @@ void arde_draw_pixel(u16* framebuffer, int x, int y, u8 r, u8 g, u8 b)
     }
 }
 
+void arde_draw_line(u16* framebuffer, float x0, float y0, float x1, float y1, u8 r, u8 g, u8 b)
+{
+    arde_vector_t position_world = {{x0, y0}};
+    arde_vector_t position_observation;
+    arde_vector_t position_sensor;
+    arde_transform_position(&world_to_observer, &position_world, &position_observation);
+    arde_transform_position(&observer_to_sensor, &position_observation, &position_sensor);
+    x0 = position_sensor.data[0];
+    y0 = position_sensor.data[1];
+
+    position_world.data[0] = x1;
+    position_world.data[1] = y1;
+    arde_transform_position(&world_to_observer, &position_world, &position_observation);
+    arde_transform_position(&observer_to_sensor, &position_observation, &position_sensor);
+    x1 = position_sensor.data[0];
+    y1 = position_sensor.data[1];
+
+    if (x0 < x1)
+    {
+        float m = (y1 - y0) / (x1 - x0);
+        while (x0 < x1)
+        {
+            arde_draw_pixel(framebuffer, x0, y0, r, g, b);
+            x0 += 1.0f;
+            y0 += m;
+        }
+    }
+    else if (x0 > x1)
+    {
+        float m = (y1 - y0) / (x1 - x0);
+        while (x0 > x1)
+        {
+            arde_draw_pixel(framebuffer, x0, y0, r, g, b);
+            x0 -= 1.0f;
+            y0 -= m;
+        }
+    }
+    else
+    {
+        if (y0 < y1)
+        {
+            while (y0 < y1)
+            {
+                arde_draw_pixel(framebuffer, x0, y0, r, g, b);
+                y0 += 1.0f;
+            }
+        }
+        else if (y0 > y1)
+        {
+            while (y0 > y1)
+            {
+                arde_draw_pixel(framebuffer, x0, y0, r, g, b);
+                y0 -= 1.0f;
+            }
+        }
+        else
+        {
+            arde_draw_pixel(framebuffer, x0, y0, r, g, b);
+        }
+    }
+}
+
 void arde_draw_circle(u16* framebuffer, float x, float y, float radius)
 {
     arde_vector_t position_world = {{x, y}};
