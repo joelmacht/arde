@@ -11,8 +11,8 @@
 
 #define FRAMEBUFFER_SIZE SCREEN_WIDTH * SCREEN_HEIGHT
 
-extern const arde_transform_t world_to_observer;
-extern const arde_transform_t observer_to_sensor;
+extern arde_transform_t world_to_observer;
+extern arde_transform_t observer_to_sensor;
 
 void arde_clear_framebuffer(u16* framebuffer);
 void arde_draw_pixel(u16* framebuffer, int x, int y, u8 r, u8 g, u8 b);

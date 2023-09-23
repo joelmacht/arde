@@ -16,6 +16,7 @@
         "string.h": "c",
         "ndstypes.h": "c",
         "interrupts.h": "c",
-        "graphics.h": "c"
+        "graphics.h": "c",
+        "controller.h": "c"
     }
 }

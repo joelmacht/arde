@@ -1,12 +1,15 @@
 #include <arde/graphics/graphics.h>
 #include <arde/physics/gravity/gravity.h>
+#include <arde/controller.h>
 
 #include <nds/system.h>
-#include <nds/arm9/video.h>
 #include <nds/interrupts.h>
+#include <nds/input.h>
 #include <nds/timers.h>
-#include <nds/arm9/console.h>
 #include <nds/ndstypes.h>
+#include <nds/arm9/console.h>
+#include <nds/arm9/video.h>
+#include <nds/arm9/input.h>
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -75,6 +78,8 @@ int main(void)
     timerStart(0, ClockDivider_1, 0xff, NULL);
     timerStart(1, ClockDivider_1, 0xff, NULL);
 
+    float zoom = 1.0f;
+
     while(1)
     {
         timerElapsed(0);
@@ -82,6 +87,21 @@ int main(void)
         u16 cycles_per_tick = timerElapsed(1);
 
         float timestep = cycles_per_tick / (float)BUS_CLOCK;
+
+        scanKeys();
+        int keys_down_state = keysDown();
+        int keys_held_state = keysHeld();
+        if (KEY_L & keys_down_state || KEY_L & keys_held_state)
+        {
+            zoom += 0.1f;
+        }
+        else if (KEY_R & keys_down_state || KEY_R & keys_held_state)
+        {
+            zoom -= 0.1f;
+        }
+        zoom = zoom > 0.0f ? zoom : 0.0f;
+        world_to_observer.scaling.data[0] = zoom;
+        world_to_observer.scaling.data[1] = zoom;
 
         arde_point_mass_update_collection(point_mass_count, point_masses, timestep);
 
