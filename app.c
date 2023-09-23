@@ -102,6 +102,22 @@ int main(void)
         zoom = zoom > 0.0f ? zoom : 0.0f;
         world_to_observer.scaling.data[0] = zoom;
         world_to_observer.scaling.data[1] = zoom;
+        if (KEY_UP & keys_down_state || KEY_UP & keys_held_state)
+        {
+            world_to_observer.translation.data[1] += 0.1f;
+        }
+        if (KEY_DOWN & keys_down_state || KEY_DOWN & keys_held_state)
+        {
+            world_to_observer.translation.data[1] -= 0.1f;
+        }
+        if (KEY_LEFT & keys_down_state || KEY_LEFT & keys_held_state)
+        {
+            world_to_observer.translation.data[0] -= 0.1f;
+        }
+        if (KEY_RIGHT & keys_down_state || KEY_RIGHT & keys_held_state)
+        {
+            world_to_observer.translation.data[0] += 0.1f;
+        }
 
         arde_point_mass_update_collection(point_mass_count, point_masses, timestep);
 
