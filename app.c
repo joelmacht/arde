@@ -105,27 +105,27 @@ int main(void)
         world_to_observer.scaling.data[1] = zoom;
         if (KEY_UP & keys_down_state || KEY_UP & keys_held_state)
         {
-            world_to_observer.translation.data[1] += 0.1f;
+            world_to_observer.translation.data[1] -= 0.1f;
         }
         if (KEY_DOWN & keys_down_state || KEY_DOWN & keys_held_state)
         {
-            world_to_observer.translation.data[1] -= 0.1f;
+            world_to_observer.translation.data[1] += 0.1f;
         }
         if (KEY_LEFT & keys_down_state || KEY_LEFT & keys_held_state)
         {
-            world_to_observer.translation.data[0] -= 0.1f;
+            world_to_observer.translation.data[0] += 0.1f;
         }
         if (KEY_RIGHT & keys_down_state || KEY_RIGHT & keys_held_state)
         {
-            world_to_observer.translation.data[0] += 0.1f;
+            world_to_observer.translation.data[0] -= 0.1f;
         }
         if (KEY_L & keys_down_state || KEY_L & keys_held_state)
         {
-            yaw -= 0.1f;
+            yaw += 0.1f;
         }
         else if (KEY_R & keys_down_state || KEY_R & keys_held_state)
         {
-            yaw += 0.1f;
+            yaw -= 0.1f;
         }
         world_to_observer.rotation.data[0] = cosf(yaw);
         world_to_observer.rotation.data[1] = sinf(yaw);

@@ -18,17 +18,17 @@ void arde_matrix_vector_multiply(const arde_matrix_t* matrix, const arde_vector_
     result->data[1] = vector->data[0] * matrix->data[2] + vector->data[1] * matrix->data[3];
 }
 
-void arde_transform_position(const arde_transform_t* transform, const arde_vector_t* position, arde_vector_t* result)
+void arde_transform_position(const arde_transform_t* transform, const arde_vector_t* position, arde_vector_t* transformed_position)
 {
-    arde_matrix_vector_multiply(&transform->rotation, position, result);
-    arde_vector_t scratchboard;
-    arde_vector_multiply(&transform->scaling, result, &scratchboard);
-    arde_vector_add(&transform->translation, &scratchboard, result);
+    arde_vector_multiply(&transform->scaling, position, transformed_position);
+    arde_vector_t spm;
+    arde_matrix_vector_multiply(&transform->rotation, transformed_position, &spm);
+    arde_vector_add(&transform->translation, &spm, transformed_position);
 }
 
-void arde_transform_direction(const arde_transform_t* transform, const arde_vector_t* direction, arde_vector_t* result)
+void arde_transform_direction(const arde_transform_t* transform, const arde_vector_t* direction, arde_vector_t* transformed_direction)
 {
-    arde_vector_t scratchboard;
-    arde_matrix_vector_multiply(&transform->rotation, direction, &scratchboard);
-    arde_vector_multiply(&transform->scaling, &scratchboard, result);
+    arde_vector_t spm;
+    arde_vector_multiply(&transform->scaling, direction, &spm);
+    arde_matrix_vector_multiply(&transform->rotation, &spm, transformed_direction);
 }

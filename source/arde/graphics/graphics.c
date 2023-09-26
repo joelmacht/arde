@@ -14,6 +14,34 @@ arde_transform_t observer_to_sensor = {
     {{SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT / 2.0f}}
 };
 
+void _project_position(const arde_vector_t * position, arde_vector_t * projected_position)
+{
+    arde_vector_t spm;
+    arde_transform_position(&world_to_observer, position, &spm);
+    arde_transform_position(&observer_to_sensor, &spm, projected_position);
+}
+
+arde_vector_t project_position(arde_vector_t position)
+{
+    arde_vector_t projected_position;
+    _project_position(&position, &projected_position);
+    return projected_position;
+}
+
+void _project_direction(const arde_vector_t * direction, arde_vector_t * projected_direction)
+{
+    arde_vector_t spm;
+    arde_transform_direction(&world_to_observer, direction, &spm);
+    arde_transform_direction(&observer_to_sensor, &spm, projected_direction);
+}
+
+arde_vector_t project_direction(arde_vector_t direction)
+{
+    arde_vector_t projected_direction;
+    _project_direction(&direction, &projected_direction);
+    return projected_direction;
+}
+
 void arde_clear_framebuffer(u16* framebuffer)
 {
     memset(framebuffer, (u16)0, FRAMEBUFFER_SIZE * sizeof(framebuffer[0]));
@@ -29,81 +57,52 @@ void arde_draw_pixel(u16* framebuffer, int x, int y, u8 r, u8 g, u8 b)
 
 void arde_draw_line(u16* framebuffer, float x0, float y0, float x1, float y1, u8 r, u8 g, u8 b)
 {
-    arde_vector_t position_world = {{x0, y0}};
-    arde_vector_t position_observation;
-    arde_vector_t position_sensor;
-    arde_transform_position(&world_to_observer, &position_world, &position_observation);
-    arde_transform_position(&observer_to_sensor, &position_observation, &position_sensor);
-    x0 = position_sensor.data[0];
-    y0 = position_sensor.data[1];
+    arde_vector_t start = project_position((arde_vector_t){{x0, y0}});
+    x0 = start.data[0];
+    y0 = start.data[1];
 
-    position_world.data[0] = x1;
-    position_world.data[1] = y1;
-    arde_transform_position(&world_to_observer, &position_world, &position_observation);
-    arde_transform_position(&observer_to_sensor, &position_observation, &position_sensor);
-    x1 = position_sensor.data[0];
-    y1 = position_sensor.data[1];
+    arde_vector_t end = project_position((arde_vector_t){{x1, y1}});
+    x1 = end.data[0];
+    y1 = end.data[1];
 
-    if (x0 < x1)
+    float sx = x0 <= x1 ? 1.0f : -1.0f;
+    float sy = y0 <= y1 ? 1.0f : -1.0f;
+    float dx = sx * (x1 - x0);
+    float dy = sy * (y1 - y0);
+
+    float x = x0;
+    float y = y0;
+
+    if (dx >= dy)
     {
-        float m = (y1 - y0) / (x1 - x0);
-        while (x0 < x1)
+        const float m = dy / dx;
+        while (sx * (x - x0) < dx)
         {
-            arde_draw_pixel(framebuffer, x0, y0, r, g, b);
-            x0 += 1.0f;
-            y0 += m;
-        }
-    }
-    else if (x0 > x1)
-    {
-        float m = (y1 - y0) / (x1 - x0);
-        while (x0 > x1)
-        {
-            arde_draw_pixel(framebuffer, x0, y0, r, g, b);
-            x0 -= 1.0f;
-            y0 -= m;
+            arde_draw_pixel(framebuffer, x, y, r, g, b);
+            x += sx * 1.0f;
+            y += sy * m;
         }
     }
     else
     {
-        if (y0 < y1)
+        const float m = dx / dy;
+        while (sy * (y - y0) < dy)
         {
-            while (y0 < y1)
-            {
-                arde_draw_pixel(framebuffer, x0, y0, r, g, b);
-                y0 += 1.0f;
-            }
-        }
-        else if (y0 > y1)
-        {
-            while (y0 > y1)
-            {
-                arde_draw_pixel(framebuffer, x0, y0, r, g, b);
-                y0 -= 1.0f;
-            }
-        }
-        else
-        {
-            arde_draw_pixel(framebuffer, x0, y0, r, g, b);
+            arde_draw_pixel(framebuffer, x, y, r, g, b);
+            y += sy * 1.0f;
+            x += sx * m;
         }
     }
 }
 
 void arde_draw_circle(u16* framebuffer, float x, float y, float radius)
 {
-    arde_vector_t position_world = {{x, y}};
-    arde_vector_t position_observation;
-    arde_vector_t position_sensor;
-    arde_transform_position(&world_to_observer, &position_world, &position_observation);
-    arde_transform_position(&observer_to_sensor, &position_observation, &position_sensor);
-    x = position_sensor.data[0];
-    y = position_sensor.data[1];
-    
-    position_world.data[0] = 0.0f;
-    position_world.data[1] = radius;
-    arde_transform_direction(&world_to_observer, &position_world, &position_observation);
-    arde_transform_direction(&observer_to_sensor, &position_observation, &position_sensor);
-    radius = position_sensor.data[1];
+    arde_vector_t center = project_position((arde_vector_t){{x, y}});
+    x = center.data[0];
+    y = center.data[1];
+
+    arde_vector_t extend = project_direction((arde_vector_t){{radius, 0.0f}});
+    radius = extend.data[0];
 
     radius = radius > 0.0f ? radius : -radius;
 
