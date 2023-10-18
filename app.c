@@ -52,7 +52,7 @@ int main(void)
     point_masses[0].acceleration[0] = 0.0f;
     point_masses[0].acceleration[1] = 0.0f;
 
-    point_masses[1].mass = 1.0f;
+    point_masses[1].mass = 5.0f;
     point_masses[1].position[0] = -0.5f;
     point_masses[1].position[1] = 0.0f;
     point_masses[1].velocity[0] = 0.0f;

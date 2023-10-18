@@ -70,7 +70,7 @@ void arde_point_mass_update_collection(int point_mass_count, arde_point_mass_t* 
 
 void arde_point_mass_draw(u16* framebuffer, const arde_point_mass_t* point_mass)
 {
-    arde_draw_circle(framebuffer, point_mass->position[0], point_mass->position[1], 0.01f);
+    arde_draw_circle(framebuffer, point_mass->position[0], point_mass->position[1], 0.01f * point_mass->mass);
 }
 
 void arde_point_mass_draw_collection(u16* framebuffer, int point_mass_count, const arde_point_mass_t* point_masses)
