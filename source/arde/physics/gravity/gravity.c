@@ -68,11 +68,36 @@ void arde_point_mass_update_collection(int point_mass_count, arde_point_mass_t* 
     }
 }
 
-void arde_point_mass_draw_collection(u16* framebuffer, int point_mass_count, arde_point_mass_t* point_masses)
+void arde_point_mass_draw(u16* framebuffer, const arde_point_mass_t* point_mass)
+{
+    arde_draw_circle(framebuffer, point_mass->position[0], point_mass->position[1], 0.01f);
+}
+
+void arde_point_mass_draw_collection(u16* framebuffer, int point_mass_count, const arde_point_mass_t* point_masses)
 {
     for (int point_mass_index = 0; point_mass_index < point_mass_count; ++point_mass_index)
     {
-        arde_point_mass_t* point_mass = point_masses + point_mass_index;
-        arde_draw_circle(framebuffer, point_mass->position[0], point_mass->position[1], 0.01f);
+        arde_point_mass_draw(framebuffer, &point_masses[point_mass_index]);
     }
+}
+
+void arde_point_mass_center_of_mass(const int point_mass_count, const arde_point_mass_t* point_masses, arde_point_mass_t * center_of_mass)
+{
+    center_of_mass->mass = 0.0f;
+    center_of_mass->position[0] = 0.0f;
+    center_of_mass->position[1] = 0.0f;
+    center_of_mass->velocity[0] = 0.0f;
+    center_of_mass->velocity[1] = 0.0f;
+    center_of_mass->acceleration[0] = 0.0f;
+    center_of_mass->acceleration[1] = 0.0f;
+
+    for (int point_mass_index = 0; point_mass_index < point_mass_count; ++point_mass_index)
+    {
+        const arde_point_mass_t * point_mass = &point_masses[point_mass_index];
+        center_of_mass->mass += point_mass->mass;
+        center_of_mass->position[0] += point_mass->mass * point_mass->position[0];
+        center_of_mass->position[1] += point_mass->mass * point_mass->position[1];
+    }
+    center_of_mass->position[0] /= center_of_mass->mass;
+    center_of_mass->position[1] /= center_of_mass->mass;
 }

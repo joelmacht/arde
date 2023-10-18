@@ -60,6 +60,9 @@ int main(void)
     point_masses[1].acceleration[0] = 0.0f;
     point_masses[1].acceleration[1] = 0.0f;
     
+    arde_point_mass_t center_of_mass;
+    arde_point_mass_center_of_mass(point_mass_count, point_masses, &center_of_mass);
+
     // resets acceleration...
     // arde_point_mass_update_collection(point_mass_count, point_masses, timestep);
     arde_point_mass_update_acceleration(point_masses + 0, point_mass_count, point_masses);    
@@ -134,9 +137,13 @@ int main(void)
 
         arde_point_mass_update_collection(point_mass_count, point_masses, timestep);
 
+        arde_point_mass_center_of_mass(point_mass_count, point_masses, &center_of_mass);
+
         arde_clear_framebuffer(FRAMEBUFFER);
 
         arde_point_mass_draw_collection(FRAMEBUFFER, point_mass_count, point_masses);
+
+        arde_point_mass_draw(FRAMEBUFFER, &center_of_mass);
 
         arde_draw_line(FRAMEBUFFER, 0.0f, 0.0f, 1.0f, 0.0f, 255, 0, 0);
         arde_draw_line(FRAMEBUFFER, 0.0f, 0.0f, 0.0f, 1.0f, 0, 255, 0);
