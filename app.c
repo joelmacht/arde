@@ -65,8 +65,8 @@ int main(void)
 
     // resets acceleration...
     // arde_point_mass_update_collection(point_mass_count, point_masses, timestep);
-    arde_point_mass_update_acceleration(point_masses + 0, point_mass_count, point_masses);    
-    arde_point_mass_update_acceleration(point_masses + 1, point_mass_count, point_masses);    
+    arde_point_mass_update_acceleration(&point_masses[0], point_mass_count, point_masses);    
+    arde_point_mass_update_acceleration(&point_masses[1], point_mass_count, point_masses);    
 
     float a = sqrtf(point_masses[0].acceleration[0] * point_masses[0].acceleration[0] + point_masses[0].acceleration[1] * point_masses[0].acceleration[1]);
     float r = sqrtf(point_masses[0].position[0] * point_masses[0].position[0] + point_masses[0].position[1] * point_masses[0].position[1]);
