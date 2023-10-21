@@ -10,7 +10,7 @@ arde_transform_t world_to_observer = {
 
 arde_transform_t observer_to_sensor = {
     {{1.0f, 0.0f, 0.0f, -1.0f}},
-    {{SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT / 2.0f}},
+    {{SCREEN_HEIGHT / 2.0f /* height < width -> aspect*/, SCREEN_HEIGHT / 2.0f}},
     {{SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT / 2.0f}}
 };
 
