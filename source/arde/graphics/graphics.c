@@ -55,16 +55,9 @@ void arde_draw_pixel(u16* framebuffer, int x, int y, u8 r, u8 g, u8 b)
     }
 }
 
-void arde_draw_line(u16* framebuffer, float x0, float y0, float x1, float y1, u8 r, u8 g, u8 b)
+
+void _arde_draw_line(u16* framebuffer, float x0, float y0, float x1, float y1, u8 r, u8 g, u8 b)
 {
-    arde_vector_t start = project_position((arde_vector_t){{x0, y0}});
-    x0 = start.data[0];
-    y0 = start.data[1];
-
-    arde_vector_t end = project_position((arde_vector_t){{x1, y1}});
-    x1 = end.data[0];
-    y1 = end.data[1];
-
     float sx = x0 <= x1 ? 1.0f : -1.0f;
     float sy = y0 <= y1 ? 1.0f : -1.0f;
     float dx = sx * (x1 - x0);
@@ -93,6 +86,32 @@ void arde_draw_line(u16* framebuffer, float x0, float y0, float x1, float y1, u8
             x += sx * m;
         }
     }
+}
+
+void arde_draw_line(u16* framebuffer, float x0, float y0, float x1, float y1, u8 r, u8 g, u8 b)
+{
+    arde_vector_t start = project_position((arde_vector_t){{x0, y0}});
+    x0 = start.data[0];
+    y0 = start.data[1];
+
+    arde_vector_t end = project_position((arde_vector_t){{x1, y1}});
+    x1 = end.data[0];
+    y1 = end.data[1];
+
+    _arde_draw_line(framebuffer, x0, y0, x1, y1, r, g, b);
+}
+
+void arde_draw_line_screen_space(u16* framebuffer, float x0, float y0, float x1, float y1, u8 r, u8 g, u8 b)
+{
+    arde_vector_t _start = {{x0, y0}};
+    arde_vector_t start;
+    arde_transform_position(&observer_to_sensor, &_start, &start);
+
+    arde_vector_t _end = {{x1, y1}};
+    arde_vector_t end;
+    arde_transform_position(&observer_to_sensor, &_end, &end);
+
+   _arde_draw_line(framebuffer, start.data[0], start.data[1], end.data[0], end.data[1], r, g, b);
 }
 
 void arde_draw_circle(u16* framebuffer, float x, float y, float radius)

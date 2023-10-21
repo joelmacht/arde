@@ -136,12 +136,15 @@ int main(void)
 
         arde_clear_framebuffer(FRAMEBUFFER);
 
+        arde_draw_line(FRAMEBUFFER, 0.0f, 0.0f, 1.0f, 0.0f, 255, 0, 0);
+        arde_draw_line(FRAMEBUFFER, 0.0f, 0.0f, 0.0f, 1.0f, 0, 255, 0);
+
         arde_point_mass_draw_collection(FRAMEBUFFER, point_mass_count, point_masses);
 
         arde_point_mass_draw(FRAMEBUFFER, &center_of_mass);
 
-        arde_draw_line(FRAMEBUFFER, 0.0f, 0.0f, 1.0f, 0.0f, 255, 0, 0);
-        arde_draw_line(FRAMEBUFFER, 0.0f, 0.0f, 0.0f, 1.0f, 0, 255, 0);
+        arde_draw_line_screen_space(FRAMEBUFFER, -0.1f, 0.0f, 0.1f, 0.0f, 255, 255, 255);
+        arde_draw_line_screen_space(FRAMEBUFFER, 0.0f, -0.1f, 0.0f, 0.1f, 255, 255, 255);
 
         u32 cycles_per_frame = cpuEndTiming();
         
