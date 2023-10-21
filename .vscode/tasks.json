@@ -31,7 +31,7 @@
 			],
 			"command": "C:/no$gba/NO$GBA.EXE",
 			"args": [
-				"app.nds"
+				// "app.nds"
 			],
 			"options": {
 				"cwd": "${workspaceFolder}"

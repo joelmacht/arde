@@ -4,7 +4,7 @@
 
 #include <math.h>
 
-static const float constant = 1e2f;
+static const float constant = 1e0f;
 
 float arde_gravitational_potential_gradient(float mass, float distance)
 {
@@ -57,6 +57,7 @@ void arde_point_mass_update_collection(int point_mass_count, arde_point_mass_t* 
         point_mass->velocity[0] += 0.5f * point_mass->acceleration[0] * timestep;
         point_mass->velocity[1] += 0.5f * point_mass->acceleration[1] * timestep;
         
+        // must be independent of velocity
         arde_point_mass_update_acceleration(point_mass, point_mass_count, point_masses);
 
         // second half

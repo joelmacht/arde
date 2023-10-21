@@ -78,19 +78,14 @@ int main(void)
     point_masses[1].velocity[0] = point_masses[1].acceleration[1] / a * v;
     point_masses[1].velocity[1] = -point_masses[1].acceleration[0] / a * v;
 
-    timerStart(0, ClockDivider_1, 0xff, NULL);
-    timerStart(1, ClockDivider_1, 0xff, NULL);
-
     float zoom = 1.0f;
     float yaw = 0.0f;
 
+    const float timestep = 1e-3f;
+
     while(1)
     {
-        timerElapsed(0);
-
-        u16 cycles_per_tick = timerElapsed(1);
-
-        float timestep = cycles_per_tick / (float)BUS_CLOCK;
+        cpuStartTiming(0);
 
         scanKeys();
         int keys_down_state = keysDown();
@@ -148,11 +143,10 @@ int main(void)
         arde_draw_line(FRAMEBUFFER, 0.0f, 0.0f, 1.0f, 0.0f, 255, 0, 0);
         arde_draw_line(FRAMEBUFFER, 0.0f, 0.0f, 0.0f, 1.0f, 0, 255, 0);
 
-        u16 cycles_per_frame = timerElapsed(0);
-
+        u32 cycles_per_frame = cpuEndTiming();
+        
         consoleClear();
-        printf("FPS: %.3f\n", (float)BUS_CLOCK / cycles_per_frame);
-        printf("dt: %1.3ef\n", timestep);
+        printf("Frame time: %.3f ms\n", cycles_per_frame / (float)BUS_CLOCK * 1000.0f);
 
         swiWaitForVBlank();
 
