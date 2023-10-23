@@ -121,7 +121,7 @@ void arde_draw_circle(u16* framebuffer, float x, float y, float radius)
     y = center.data[1];
 
     arde_vector_t extend = project_direction((arde_vector_t){{radius, 0.0f}});
-    radius = extend.data[0];
+    radius = sqrtf(extend.data[0] * extend.data[0] + extend.data[1] * extend.data[1]);
 
     radius = radius > 0.0f ? radius : -radius;
 
